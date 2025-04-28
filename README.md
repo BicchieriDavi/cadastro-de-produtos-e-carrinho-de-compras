@@ -1,12 +1,12 @@
 # 💻 Desafio - Cadastro de Produtos e Carrinho de Compras (em JS Puro)
 
-## 🧠 Objetivo
+## 🧐 Objetivo
 
 Criar um sistema simples para cadastrar produtos e permitir que um cliente (PF ou PJ) interaja com um catálogo de produtos e gerencie um carrinho de compras.
 
 ---
 
-## ✅ Regras
+## ✅ Regras - Parte 1 (Funções)
 
 ### 1. Cadastro de Produtos
 
@@ -66,9 +66,9 @@ Criar um sistema simples para cadastrar produtos e permitir que um cliente (PF o
 
 ---
 
-## 🧪 Exemplo de Uso
+## 🧪 Exemplo de Uso - Parte 1
 
-```js
+```javascript
 // Cadastro de produtos
 cadastrarProduto("Produto A", 50, 40, 2);
 cadastrarProduto("Produto B", 30, 25, 1);
@@ -90,5 +90,83 @@ clientePF.modificarCarrinho(0, 2);
 clientePF.modificarCarrinho(0, 0);
 clientePF.removerDoCarrinho(1);
 clientePF.removerDoCarrinho(2);
+clientePF.fecharCarrinho();
+```
+
+---
+
+# 🚀 Parte 2 - Refatoração Usando Classes
+
+Agora, o mesmo sistema foi reestruturado utilizando **Programação Orientada a Objetos (POO)**. As funcionalidades são as mesmas, com pequenas melhorias:
+
+### 📦 Estrutura de Classes
+
+- **Produto**
+
+  - `codigo` (string, gerado aleatoriamente)
+  - `descricao` (string)
+  - `valorPF` (number)
+  - `valorPJ` (number)
+  - `qtdeMinima` (number)
+
+- **Estoque**
+
+  - `produtos` (array de produtos disponíveis)
+  - Métodos:
+    - `addProduto(produto, quantidade)`
+
+- **Cliente**
+
+  - `tipo` (PF ou PJ)
+  - `carrinho` (instância de Carrinho)
+  - Métodos:
+    - `catalogoProdutos(estoque)`
+    - `modificarCarrinho(estoque, codigoProduto, quantidade)`
+    - `removerDoCarrinho(codigoProduto)`
+    - `fecharCarrinho()`
+    - `aplicarDesconto(valorTotal)`
+
+- **Carrinho**
+
+  - `itens` (array de produtos adicionados)
+  - Métodos:
+    - `addItens(itens)`
+
+---
+
+### 📋 Alterações em relação à Parte 1
+
+- **Estoque** substitui o antigo catálogo.
+- Cada produto no estoque possui uma **quantidade disponível**.
+- Os clientes interagem com o estoque para visualizar e comprar produtos.
+- Todo produto novo criado deve ser adicionado ao estoque com uma quantidade fictícia definida.
+
+---
+
+## 🧪 Exemplo de Uso - Parte 2
+
+```javascript
+// Criação de estoque e produtos
+const estoque = new Estoque();
+const produto1 = new Produto("Produto A", 50, 40, 2);
+const produto2 = new Produto("Produto B", 30, 25, 1);
+const produto3 = new Produto("Produto C", 100, 90, 5);
+
+estoque.addProduto(produto1, 100);
+estoque.addProduto(produto2, 150);
+estoque.addProduto(produto3, 50);
+
+// Cliente PJ
+const clientePJ = new Cliente("PJ");
+clientePJ.catalogoProdutos(estoque);
+clientePJ.modificarCarrinho(estoque, produto1.codigo, 3);
+clientePJ.modificarCarrinho(estoque, produto2.codigo, 0);
+clientePJ.fecharCarrinho();
+
+// Cliente PF
+const clientePF = new Cliente("PF");
+clientePF.catalogoProdutos(estoque);
+clientePF.modificarCarrinho(estoque, produto1.codigo, 2);
+clientePF.removerDoCarrinho(produto2.codigo);
 clientePF.fecharCarrinho();
 ```
